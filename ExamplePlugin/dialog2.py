@@ -20,38 +20,16 @@
 ###############################################################################
 __author__ = 'Maciej Kamiński Politechnika Wrocławska'
 
-from os import path
-from PyQt4.QtGui import QIcon,QMessageBox
-from example_plugin_action1 import Action1
-from example_plugin_action2 import Action2
-from example_plugin_action3 import Action3
+import os
 
-class ExamplePluginPlugin(object):
-    def __init__(self,iface):
-        self.iface=iface
-        self.plugin_path=path.dirname(path.abspath(__file__))
-        self.plugin_menu_entry="&ExamplePlugin"
-        self.menu_actions=[]
-        # test requirements
+from PyQt4 import QtGui, uic
 
-        #adding actions
-        self.menu_actions.append(Action1(self))
-        self.menu_actions.append(Action2(self))
-        self.menu_actions.append(Action3(self))
+FORM_CLASS, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'dialog2.ui'))
 
+class Dialog2(QtGui.QDialog, FORM_CLASS):
+    def __init__(self, parent=None):
+        """Constructor."""
+        super(Dialog2, self).__init__(parent)
 
-
-
-    def initGui(self):
-        """
-        Gui initialization and actions adding
-        """
-        for action in self.menu_actions:
-            self.iface.addPluginToMenu(self.plugin_menu_entry,action)
-
-    def unload(self):
-        """
-        Gui purge
-        """
-        for action in self.menu_actions:
-            self.iface.removePluginMenu(self.plugin_menu_entry,action)
+        self.setupUi(self)

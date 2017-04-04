@@ -20,38 +20,34 @@
 ###############################################################################
 __author__ = 'Maciej Kamiński Politechnika Wrocławska'
 
+
+from PyQt4.QtGui import QIcon,QAction,QMessageBox,QApplication
+from PyQt4.QtCore import Qt,QBasicTimer
 from os import path
-from PyQt4.QtGui import QIcon,QMessageBox
-from example_plugin_action1 import Action1
-from example_plugin_action2 import Action2
-from example_plugin_action3 import Action3
+#from maindialog import MongoConnectorDialog
+#from qgis.core import QgsMapLayerRegistry
 
-class ExamplePluginPlugin(object):
-    def __init__(self,iface):
-        self.iface=iface
-        self.plugin_path=path.dirname(path.abspath(__file__))
-        self.plugin_menu_entry="&ExamplePlugin"
-        self.menu_actions=[]
-        # test requirements
+class Action1(QAction):
+    """
+    Action for opening dock widget for database connections
+    """
+    def __init__(self,plugin):
+        self.icon_path=path.join(plugin.plugin_path,'images','icon.png')
+        self.qicon=QIcon(self.icon_path)
+        super(Action1,self).__init__(self.qicon,"&Test action",plugin.iface.mainWindow())
+        self.triggered.connect(self.run)
 
-        #adding actions
-        self.menu_actions.append(Action1(self))
-        self.menu_actions.append(Action2(self))
-        self.menu_actions.append(Action3(self))
+        self.plugin=plugin
+        self.iface=plugin.iface
 
-
-
-
-    def initGui(self):
+    def run(self):
         """
-        Gui initialization and actions adding
+        Just show/dock Widget/Plugin
         """
-        for action in self.menu_actions:
-            self.iface.addPluginToMenu(self.plugin_menu_entry,action)
+        print("DEBUG INFORMATION")
 
-    def unload(self):
-        """
-        Gui purge
-        """
-        for action in self.menu_actions:
-            self.iface.removePluginMenu(self.plugin_menu_entry,action)
+        QMessageBox.information(self.plugin.iface.mainWindow(),
+                "Simple Title",
+                "Heyy First Plugin",
+                QMessageBox.Ok
+                )
